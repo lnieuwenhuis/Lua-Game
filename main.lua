@@ -56,6 +56,12 @@ love.update = function()
         player.physics.grounded = false
     end
 
+    if player.y >= window_height - player.height and player.physics.grounded then
+        player.y = window_height - player.height
+    elseif player.y >= platform_left.y - player.height - 1 and player.physics.grounded then
+        player.y = platform_left.y - player.height + 1
+    end
+
     if love.keyboard.isDown('space') and player.physics.grounded then
         player.physics.velocity.y = -player.physics.jump_force
     elseif love.keyboard.isDown('d') and love.keyboard.isDown('a') then
