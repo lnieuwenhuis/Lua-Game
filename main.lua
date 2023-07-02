@@ -1,5 +1,7 @@
 love.load = function()
     love.window.setTitle("Moon Invasion Defense")
+
+    -- Player Variables
     player = {
         x = 100,
         y = 100,
@@ -17,6 +19,7 @@ love.load = function()
         }
     }
 
+    -- Platform Variables
     platform_left = {
         x = 550,
         y = 400,
@@ -30,12 +33,15 @@ love.load = function()
         height = 20,
     }
 
+    -- Window Border Determining
     window_width, window_height = love.graphics.getDimensions()
 end
 
 love.update = function()
+    -- Reset Player Velocity
     player.physics.velocity.x = 0
 
+    -- Collisions With Platforms
     if player.y >= window_height - player.height or (
             player.physics.velocity.y >= 0
             and player.x + player.width > platform_left.x
@@ -56,12 +62,14 @@ love.update = function()
         player.physics.grounded = false
     end
 
+    -- Platform Clipping Hotfix
     if player.y >= window_height - player.height and player.physics.grounded then
         player.y = window_height - player.height
     elseif player.y >= platform_left.y - player.height - 1 and player.physics.grounded then
         player.y = platform_left.y - player.height + 1
     end
 
+    -- Key Mapping For Movement
     if love.keyboard.isDown('space') and player.physics.grounded then
         player.physics.velocity.y = -player.physics.jump_force
     elseif love.keyboard.isDown('d') and love.keyboard.isDown('a') then
@@ -71,13 +79,17 @@ love.update = function()
     elseif love.keyboard.isDown('a') and player.x > 0 then
         player.physics.velocity.x = -player.physics.speed
     end
+
+    -- Player Movement
     player.x = player.x + player.physics.velocity.x
     player.y = player.y + player.physics.velocity.y
 
+    -- Getting FPS
     fps = love.timer.getFPS()
 end
 
 love.draw = function()
+    -- Drawing Player
     love.graphics.rectangle(
         "fill",
         player.x,
@@ -86,6 +98,7 @@ love.draw = function()
         player.height
     )
 
+    -- Drawing Platforms
     love.graphics.rectangle(
         "fill",
         platform_left.x,
@@ -101,6 +114,7 @@ love.draw = function()
         platform_right.height
     )
 
+    -- Drawing If Player is Grounded and FPS
     love.graphics.print(tostring(player.physics.grounded), 0, 15)
     love.graphics.print(fps)
 end
