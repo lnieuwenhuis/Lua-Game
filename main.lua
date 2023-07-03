@@ -33,6 +33,10 @@ love.load = function()
         height = 20,
     }
 
+    projectiles = {
+
+    }
+
     -- Window Border Determining
     window_width, window_height = love.graphics.getDimensions()
 
@@ -127,4 +131,15 @@ love.draw = function()
     -- Drawing If Player is Grounded and FPS
     love.graphics.print(tostring(player.physics.grounded), 0, 15)
     love.graphics.print(fps)
+
+    love.graphics.print(tostring(printx), 0, 30)
+    love.graphics.print(tostring(printy), 0, 40)
+end
+
+-- Check if Mouse1 is Pressed
+function love.mousepressed(x, y, button, istouch)
+    if button == 1 then -- Versions prior to 0.10.0 use the MouseConstant 'l'
+        printx = x
+        printy = y
+    end
 end
