@@ -33,6 +33,7 @@ love.load = function()
         height = 20,
     }
 
+    -- Projectiles Variables
     projectiles = {
 
     }
@@ -46,8 +47,8 @@ love.load = function()
 end
 
 love.update = function(dt)
-    accumulator = accumulator + dt
     -- Caps Physics to 60 TPS
+    accumulator = accumulator + dt
     if accumulator >= tick_period then
         -- Reset Player Velocity
         player.physics.velocity.x = 0
@@ -138,7 +139,7 @@ end
 
 -- Check if Mouse1 is Pressed
 function love.mousepressed(x, y, button, istouch)
-    if button == 1 then -- Versions prior to 0.10.0 use the MouseConstant 'l'
+    if button == 1 then
         printx = x
         printy = y
     end
