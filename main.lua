@@ -35,55 +35,65 @@ love.load = function()
 
     -- Window Border Determining
     window_width, window_height = love.graphics.getDimensions()
+
+    -- Setting up Physics Capping
+    tick_period = 1 / 60
+    accumulator = 0.0
 end
 
-love.update = function()
-    -- Reset Player Velocity
-    player.physics.velocity.x = 0
-
-    -- Collisions With Platforms
-    if player.y >= window_height - player.height or (
-            player.physics.velocity.y >= 0
-            and player.x + player.width > platform_left.x
-            and player.x < platform_left.x + platform_left.width
-            and player.y + player.height > platform_left.y
-            and player.y + player.height - 1 < platform_left.y + platform_left.height
-        ) or (
-            player.physics.velocity.y >= 0
-            and player.x + player.width > platform_right.x
-            and player.x < platform_right.x + platform_right.width
-            and player.y + player.height > platform_right.y
-            and player.y + player.height - 1 < platform_right.y + platform_right.height
-        ) then
-        player.physics.velocity.y = 0
-        player.physics.grounded = true
-    else
-        player.physics.velocity.y = player.physics.velocity.y + player.physics.gravity
-        player.physics.grounded = false
-    end
-
-    -- Platform Clipping Hotfix
-    if player.y >= window_height - player.height and player.physics.grounded then
-        player.y = window_height - player.height
-    elseif player.y >= platform_left.y - player.height - 1 and player.physics.grounded then
-        player.y = platform_left.y - player.height + 1
-    end
-
-    -- Key Mapping For Movement
-    if love.keyboard.isDown('space') and player.physics.grounded then
-        player.physics.velocity.y = -player.physics.jump_force
-    elseif love.keyboard.isDown('d') and love.keyboard.isDown('a') then
+love.update = function(dt)
+    accumulator = accumulator + dt
+    -- Caps Physics to 60 TPS
+    if accumulator >= tick_period then
+        -- Reset Player Velocity
         player.physics.velocity.x = 0
-    elseif love.keyboard.isDown('d') and player.x < window_width - player.height then
-        player.physics.velocity.x = player.physics.speed
-    elseif love.keyboard.isDown('a') and player.x > 0 then
-        player.physics.velocity.x = -player.physics.speed
+
+        -- Collisions With Platforms and Ground
+        if player.y >= window_height - player.height or (
+                player.physics.velocity.y >= 0
+                and player.x + player.width > platform_left.x
+                and player.x < platform_left.x + platform_left.width
+                and player.y + player.height > platform_left.y
+                and player.y + player.height - 1 < platform_left.y + platform_left.height
+            ) or (
+                player.physics.velocity.y >= 0
+                and player.x + player.width > platform_right.x
+                and player.x < platform_right.x + platform_right.width
+                and player.y + player.height > platform_right.y
+                and player.y + player.height - 1 < platform_right.y + platform_right.height
+            ) then
+            player.physics.velocity.y = 0
+            player.physics.grounded = true
+        else
+            player.physics.velocity.y = player.physics.velocity.y + player.physics.gravity
+            player.physics.grounded = false
+        end
+
+        -- Platform Clipping Hotfix
+        if player.y >= window_height - player.height and player.physics.grounded then
+            player.y = window_height - player.height
+        elseif player.y >= platform_left.y - player.height - 1 and player.physics.grounded then
+            player.y = platform_left.y - player.height + 1
+        end
+
+        -- Key Mapping For Movement
+        if love.keyboard.isDown('space') and player.physics.grounded then
+            player.physics.velocity.y = -player.physics.jump_force
+        elseif love.keyboard.isDown('d') and love.keyboard.isDown('a') then
+            player.physics.velocity.x = 0
+        elseif love.keyboard.isDown('d') and player.x < window_width - player.height then
+            player.physics.velocity.x = player.physics.speed
+        elseif love.keyboard.isDown('a') and player.x > 0 then
+            player.physics.velocity.x = -player.physics.speed
+        end
+
+        -- Player Movement
+        player.x = player.x + player.physics.velocity.x
+        player.y = player.y + player.physics.velocity.y
+
+        -- Resetting TPS
+        accumulator = accumulator - tick_period
     end
-
-    -- Player Movement
-    player.x = player.x + player.physics.velocity.x
-    player.y = player.y + player.physics.velocity.y
-
     -- Getting FPS
     fps = love.timer.getFPS()
 end
