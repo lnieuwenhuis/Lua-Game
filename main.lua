@@ -136,10 +136,17 @@ love.draw = function()
     love.graphics.print(tostring(printy), 0, 40)
 end
 
--- Check if Mouse1 is Pressed
+-- Check if and where Mouse1 is Pressed
 function love.mousepressed(x, y, button, istouch)
     if button == 1 then -- Versions prior to 0.10.0 use the MouseConstant 'l'
         printx = x
         printy = y
+    end
+end
+
+-- End game when Escape is pressed
+function love.keypressed(key)
+    if key == "escape" then
+        love.event.quit()
     end
 end
