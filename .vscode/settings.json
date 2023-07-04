@@ -1,7 +1,8 @@
 {
     "Lua.diagnostics.disable": [
         "undefined-global",
-        "lowercase-global"
+        "lowercase-global",
+        "param-type-mismatch"
     ],
     "Lua.runtime.version": "LuaJIT",
     "Lua.runtime.special": {
