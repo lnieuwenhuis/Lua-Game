@@ -33,9 +33,8 @@ love.load = function()
         height = 20,
     }
 
-    -- Projectiles Variables
+    -- Projectiles table
     projectiles = {
-
     }
 
     -- Window Border Determining
@@ -47,8 +46,8 @@ love.load = function()
 end
 
 love.update = function(dt)
-    -- Caps Physics to 60 TPS
     accumulator = accumulator + dt
+    -- Caps Physics to 60 TPS
     if accumulator >= tick_period then
         -- Reset Player Velocity
         player.physics.velocity.x = 0
@@ -96,6 +95,20 @@ love.update = function(dt)
         player.x = player.x + player.physics.velocity.x
         player.y = player.y + player.physics.velocity.y
 
+        -- Projectile Movement
+        for i, projectile in pairs(projectiles) do
+            if projectile.direction == 1 then
+                projectile.x = projectile.x - 7
+            elseif projectile.direction == 2 then
+                projectile.x = projectile.x + 7
+            end
+
+            if projectile.x >= window_width or projectile.x <= 0 then
+                table.remove(projectiles, i)
+            end
+        end
+
+
         -- Resetting TPS
         accumulator = accumulator - tick_period
     end
@@ -129,24 +142,56 @@ love.draw = function()
         platform_right.height
     )
 
+    -- Draw Projectiles
+    for i, projectile in pairs(projectiles) do
+        love.graphics.rectangle(
+            "fill",
+            projectile.x,
+            projectile.y,
+            projectile.w,
+            projectile.h
+        )
+    end
+
     -- Drawing If Player is Grounded and FPS
     love.graphics.print(tostring(player.physics.grounded), 0, 15)
     love.graphics.print(fps)
 
-    love.graphics.print(tostring(printx), 0, 30)
-    love.graphics.print(tostring(printy), 0, 40)
+    love.graphics.print(tostring(#projectiles), 50, 15)
 end
 
--- Check if and where Mouse1 is Pressed
-function love.mousepressed(x, y, button, istouch)
-    if button == 1 then
-        printx = x
-        printy = y
-    end
-end
-
--- End game when Escape is pressed
 function love.keypressed(key)
+    -- Check for left arrow press
+    if key == "left" then
+        -- Insert into Projectiles table
+        table.insert(
+            projectiles,
+            {
+                x = player.x,
+                y = player.y,
+                w = 20,
+                h = 3,
+                direction = 1
+            }
+        )
+    end
+
+    -- Check for right arrow press
+    if key == "right" then
+        -- Insert into Projectiles table
+        table.insert(
+            projectiles,
+            {
+                x = player.x,
+                y = player.y,
+                w = 20,
+                h = 3,
+                direction = 2
+            }
+        )
+    end
+
+    -- End game when Escape is pressed
     if key == "escape" then
         love.event.quit()
     end
