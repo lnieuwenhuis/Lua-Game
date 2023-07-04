@@ -37,7 +37,7 @@ love.load = function()
             jump_force = 15,
             grounded = false,
         },
-        health = 1000,
+        health = 780,
         dead = false,
     }
 
@@ -184,7 +184,7 @@ love.draw = function()
         player.height
     )
 
-    love.graphics.setColor(255, 0, 0)
+    love.graphics.setColor(0, 0, 255)
     love.graphics.rectangle(
         "fill",
         boss.x,
@@ -220,6 +220,42 @@ love.draw = function()
             projectile.h
         )
     end
+
+    -- Drawing Boss health bar
+    love.graphics.rectangle(
+        "fill",
+        10,
+        10,
+        780,
+        22
+    )
+    love.graphics.setColor(255, 0, 0)
+    love.graphics.rectangle(
+        "fill",
+        10,
+        10,
+        boss.health,
+        20
+    )
+    love.graphics.setColor(255, 255, 255)
+
+    -- Drawing Player health bar
+    love.graphics.rectangle(
+        "fill",
+        10,
+        50,
+        300,
+        17
+    )
+    love.graphics.setColor(255, 0, 0)
+    love.graphics.rectangle(
+        "fill",
+        10,
+        50,
+        player.health * 3,
+        15
+    )
+    love.graphics.setColor(255, 255, 255)
 
     -- Drawing If Player is Grounded, FPS and number of Projectiles
     love.graphics.print(tostring(player.physics.grounded), 0, 15)
