@@ -154,7 +154,7 @@ love.update = function(dt)
         boss.x = boss.x + boss.physics.velocity.x
         boss.y = boss.y + boss.physics.velocity.y
 
-        -- Projectile Movement
+        -- Player Projectile Movement
         for i, projectile in pairs(projectiles.player) do
             if projectile.direction == 1 then
                 projectile.x = projectile.x - 7
@@ -166,7 +166,6 @@ love.update = function(dt)
                 table.remove(projectiles.player, i)
             end
         end
-
 
         -- Resetting TPS
         accumulator = accumulator - tick_period
@@ -222,10 +221,9 @@ love.draw = function()
         )
     end
 
-    -- Drawing If Player is Grounded and FPS
+    -- Drawing If Player is Grounded, FPS and number of Projectiles
     love.graphics.print(tostring(player.physics.grounded), 0, 15)
     love.graphics.print(fps)
-
     love.graphics.print(tostring(#projectiles.player), 50, 15)
 end
 
