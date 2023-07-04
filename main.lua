@@ -35,6 +35,12 @@ love.load = function()
 
     -- Projectiles table
     projectiles = {
+        boss = {
+
+        },
+        player = {
+
+        }
     }
 
     -- Window Border Determining
@@ -96,7 +102,7 @@ love.update = function(dt)
         player.y = player.y + player.physics.velocity.y
 
         -- Projectile Movement
-        for i, projectile in pairs(projectiles) do
+        for i, projectile in pairs(projectiles.player) do
             if projectile.direction == 1 then
                 projectile.x = projectile.x - 7
             elseif projectile.direction == 2 then
@@ -104,7 +110,7 @@ love.update = function(dt)
             end
 
             if projectile.x >= window_width or projectile.x <= 0 then
-                table.remove(projectiles, i)
+                table.remove(projectiles.player, i)
             end
         end
 
@@ -143,7 +149,7 @@ love.draw = function()
     )
 
     -- Draw Projectiles
-    for i, projectile in pairs(projectiles) do
+    for i, projectile in pairs(projectiles.player) do
         love.graphics.rectangle(
             "fill",
             projectile.x,
@@ -157,7 +163,7 @@ love.draw = function()
     love.graphics.print(tostring(player.physics.grounded), 0, 15)
     love.graphics.print(fps)
 
-    love.graphics.print(tostring(#projectiles), 50, 15)
+    love.graphics.print(tostring(#projectiles.player), 50, 15)
 end
 
 function love.keypressed(key)
@@ -165,7 +171,7 @@ function love.keypressed(key)
     if key == "left" then
         -- Insert into Projectiles table
         table.insert(
-            projectiles,
+            projectiles.player,
             {
                 x = player.x,
                 y = player.y,
@@ -180,7 +186,7 @@ function love.keypressed(key)
     if key == "right" then
         -- Insert into Projectiles table
         table.insert(
-            projectiles,
+            projectiles.player,
             {
                 x = player.x,
                 y = player.y,
