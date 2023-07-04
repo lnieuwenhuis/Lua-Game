@@ -16,7 +16,29 @@ love.load = function()
             speed = 5,
             jump_force = 15,
             grounded = false,
-        }
+        },
+        health = 100,
+        dead = false,
+    }
+
+    -- Boss Variables
+    boss = {
+        x = 600,
+        y = 500,
+        width = 60,
+        height = 60,
+        physics = {
+            velocity = {
+                x = 0,
+                y = 0,
+            },
+            gravity = 0.5,
+            speed = 5,
+            jump_force = 15,
+            grounded = false,
+        },
+        health = 1000,
+        dead = false,
     }
 
     -- Platform Variables
@@ -55,10 +77,11 @@ love.update = function(dt)
     accumulator = accumulator + dt
     -- Caps Physics to 60 TPS
     if accumulator >= tick_period then
-        -- Reset Player Velocity
+        -- Reset Player and Boss Velocity
         player.physics.velocity.x = 0
+        boss.physics.velocity.x = 0
 
-        -- Collisions With Platforms and Ground
+        -- Player Collisions With Platforms and Ground
         if player.y >= window_height - player.height or (
                 player.physics.velocity.y >= 0
                 and player.x + player.width > platform_left.x
@@ -79,11 +102,38 @@ love.update = function(dt)
             player.physics.grounded = false
         end
 
+        -- Boss Collisions with Platforms and Ground
+        if boss.y >= window_height - boss.height or (
+                boss.physics.velocity.y >= 0
+                and boss.x + boss.width > platform_left.x
+                and boss.x < platform_left.x + platform_left.width
+                and boss.y + boss.height > platform_left.y
+                and boss.y + boss.height - 1 < platform_left.y + platform_left.height
+            ) or (
+                boss.physics.velocity.y >= 0
+                and boss.x + boss.width > platform_right.x
+                and boss.x < platform_right.x + platform_right.width
+                and boss.y + boss.height > platform_right.y
+                and boss.y + boss.height - 1 < platform_right.y + platform_right.height
+            ) then
+            boss.physics.velocity.y = 0
+            boss.physics.grounded = true
+        else
+            boss.physics.velocity.y = boss.physics.velocity.y + boss.physics.gravity
+            boss.physics.grounded = false
+        end
+
         -- Platform Clipping Hotfix
         if player.y >= window_height - player.height and player.physics.grounded then
             player.y = window_height - player.height
         elseif player.y >= platform_left.y - player.height - 1 and player.physics.grounded then
             player.y = platform_left.y - player.height + 1
+        end
+        -- Also for the boss
+        if boss.y >= window_height - boss.height and boss.physics.grounded then
+            boss.y = window_height - boss.height
+        elseif boss.y >= platform_left.y - boss.height - 1 and boss.physics.grounded then
+            boss.y = platform_left.y - boss.height + 1
         end
 
         -- Key Mapping For Movement
@@ -100,6 +150,9 @@ love.update = function(dt)
         -- Player Movement
         player.x = player.x + player.physics.velocity.x
         player.y = player.y + player.physics.velocity.y
+        -- Boss Movement
+        boss.x = boss.x + boss.physics.velocity.x
+        boss.y = boss.y + boss.physics.velocity.y
 
         -- Projectile Movement
         for i, projectile in pairs(projectiles.player) do
@@ -131,6 +184,16 @@ love.draw = function()
         player.width,
         player.height
     )
+
+    love.graphics.setColor(255, 0, 0)
+    love.graphics.rectangle(
+        "fill",
+        boss.x,
+        boss.y,
+        boss.width,
+        boss.height
+    )
+    love.graphics.setColor(255, 255, 255)
 
     -- Drawing Platforms
     love.graphics.rectangle(
