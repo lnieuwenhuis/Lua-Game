@@ -323,6 +323,11 @@ function love.keypressed(key)
     if key == "return" and (boss.health <= 0 or player.health <= 0) then
         boss.health = 780
         player.health = 100
+        player.x = 100
+        player.y = 100
+        boss.x = 600
+        boss.y = 500
+
         for i, projectile in pairs(projectiles.player) do
             table.remove(projectiles.player, i)
         end
