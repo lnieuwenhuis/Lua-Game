@@ -18,7 +18,6 @@ love.load = function()
             grounded = false,
         },
         health = 100,
-        dead = false,
     }
 
     -- Boss Variables
@@ -38,7 +37,6 @@ love.load = function()
             grounded = false,
         },
         health = 780,
-        dead = false,
     }
 
     -- Platform Variables
@@ -171,7 +169,7 @@ love.update = function(dt)
         for i, projectile in pairs(projectiles.player) do
             if (projectile.x > boss.x and projectile.x < boss.x + boss.width)
                 and (projectile.y > boss.y and projectile.y < boss.y + boss.height) then
-                boss.health = boss.health - 78
+                boss.health = boss.health - 7.8
                 table.remove(projectiles.player, i)
             end
         end
