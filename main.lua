@@ -171,7 +171,7 @@ love.update = function(dt)
         for i, projectile in pairs(projectiles.player) do
             if (projectile.x > boss.x and projectile.x < boss.x + boss.width)
                 and (projectile.y > boss.y and projectile.y < boss.y + boss.height) then
-                boss.health = boss.health - 7.8
+                boss.health = boss.health - 78
                 table.remove(projectiles.player, i)
             end
         end
@@ -193,92 +193,100 @@ love.update = function(dt)
 end
 
 love.draw = function()
-    -- Drawing Player
-    love.graphics.rectangle(
-        "fill",
-        player.x,
-        player.y,
-        player.width,
-        player.height
-    )
-
-    love.graphics.setColor(0, 0, 255)
-    love.graphics.rectangle(
-        "fill",
-        boss.x,
-        boss.y,
-        boss.width,
-        boss.height
-    )
-    love.graphics.setColor(255, 255, 255)
-
-    -- Drawing Platforms
-    love.graphics.rectangle(
-        "fill",
-        platform_left.x,
-        platform_left.y,
-        platform_left.width,
-        platform_left.height
-    )
-    love.graphics.rectangle(
-        "fill",
-        platform_right.x,
-        platform_right.y,
-        platform_right.width,
-        platform_right.height
-    )
-
-    -- Draw Projectiles
-    for i, projectile in pairs(projectiles.player) do
+    if boss.health > 0 and player.health > 0 then
+        -- Drawing Player
         love.graphics.rectangle(
             "fill",
-            projectile.x,
-            projectile.y,
-            projectile.w,
-            projectile.h
+            player.x,
+            player.y,
+            player.width,
+            player.height
         )
+
+        love.graphics.setColor(0, 0, 255)
+        love.graphics.rectangle(
+            "fill",
+            boss.x,
+            boss.y,
+            boss.width,
+            boss.height
+        )
+        love.graphics.setColor(255, 255, 255)
+
+        -- Drawing Platforms
+        love.graphics.rectangle(
+            "fill",
+            platform_left.x,
+            platform_left.y,
+            platform_left.width,
+            platform_left.height
+        )
+        love.graphics.rectangle(
+            "fill",
+            platform_right.x,
+            platform_right.y,
+            platform_right.width,
+            platform_right.height
+        )
+
+        -- Draw Projectiles
+        for i, projectile in pairs(projectiles.player) do
+            love.graphics.rectangle(
+                "fill",
+                projectile.x,
+                projectile.y,
+                projectile.w,
+                projectile.h
+            )
+        end
+
+        -- Drawing Boss health bar
+        love.graphics.rectangle(
+            "fill",
+            10,
+            10,
+            780,
+            22
+        )
+        love.graphics.setColor(255, 0, 0)
+        love.graphics.rectangle(
+            "fill",
+            10,
+            10,
+            boss.health,
+            20
+        )
+        love.graphics.setColor(255, 255, 255)
+
+        -- Drawing Player health bar
+        love.graphics.rectangle(
+            "fill",
+            10,
+            50,
+            300,
+            17
+        )
+        love.graphics.setColor(255, 0, 0)
+        love.graphics.rectangle(
+            "fill",
+            10,
+            50,
+            player.health * 3,
+            15
+        )
+        love.graphics.setColor(255, 255, 255)
+
+        -- Drawing If Player is Grounded, FPS and number of Projectiles
+        love.graphics.print(tostring(player.physics.grounded), 0, 15)
+        love.graphics.print(fps)
+        love.graphics.print(tostring(#projectiles.player), 50, 15)
+    elseif boss.health <= 0 then
+        love.graphics.print("YOU WON!!", (window_width / 2) - 50)
+        love.graphics.print("Press Enter to Replay...", (window_width / 2) - 90, 20)
+    elseif player.health <= 0 then
+        love.graphics.print("You lost...", (window_width / 2) - 50)
+        love.graphics.print("Press Enter to Replay...", (window_width / 2) - 90, 20)
     end
-
-    -- Drawing Boss health bar
-    love.graphics.rectangle(
-        "fill",
-        10,
-        10,
-        780,
-        22
-    )
-    love.graphics.setColor(255, 0, 0)
-    love.graphics.rectangle(
-        "fill",
-        10,
-        10,
-        boss.health,
-        20
-    )
-    love.graphics.setColor(255, 255, 255)
-
-    -- Drawing Player health bar
-    love.graphics.rectangle(
-        "fill",
-        10,
-        50,
-        300,
-        17
-    )
-    love.graphics.setColor(255, 0, 0)
-    love.graphics.rectangle(
-        "fill",
-        10,
-        50,
-        player.health * 3,
-        15
-    )
-    love.graphics.setColor(255, 255, 255)
-
-    -- Drawing If Player is Grounded, FPS and number of Projectiles
-    love.graphics.print(tostring(player.physics.grounded), 0, 15)
-    love.graphics.print(fps)
-    love.graphics.print(tostring(#projectiles.player), 50, 15)
 end
 
 function love.keypressed(key)
@@ -310,6 +318,18 @@ function love.keypressed(key)
                 direction = 2
             }
         )
+    end
+
+    -- Reset game on Enter
+    if key == "return" and (boss.health <= 0 or player.health <= 0) then
+        boss.health = 780
+        player.health = 100
+        for i, projectile in pairs(projectiles.player) do
+            table.remove(projectiles.player, i)
+        end
+        for i, projectile in pairs(projectiles.boss) do
+            table.remove(projectiles.boss, i)
+        end
     end
 
     -- End game when Escape is pressed
