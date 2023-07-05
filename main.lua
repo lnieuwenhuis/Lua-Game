@@ -180,7 +180,7 @@ love.update = function(dt)
         for i, projectile in pairs(projectiles.boss) do
             if (projectile.x > player.x and projectile.x < player.x + player.width)
                 and (projectile.y > player.y and projectile.y < player.y + player.height) then
-                player.health = player.health - 7.8
+                player.health = player.health - 10
                 table.remove(projectiles.boss, i)
             end
         end
