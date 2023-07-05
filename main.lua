@@ -289,6 +289,7 @@ love.draw = function()
     end
 end
 
+-- Other love functions
 function love.keypressed(key)
     -- Check for left arrow press
     if key == "left" then
