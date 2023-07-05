@@ -167,6 +167,24 @@ love.update = function(dt)
             end
         end
 
+        -- Boss hit by Projectile
+        for i, projectile in pairs(projectiles.player) do
+            if (projectile.x > boss.x and projectile.x < boss.x + boss.width)
+                and (projectile.y > boss.y and projectile.y < boss.y + boss.height) then
+                boss.health = boss.health - 7.8
+                table.remove(projectiles.player, i)
+            end
+        end
+
+        -- Player hit by Projectiles
+        for i, projectile in pairs(projectiles.boss) do
+            if (projectile.x > player.x and projectile.x < player.x + player.width)
+                and (projectile.y > player.y and projectile.y < player.y + player.height) then
+                player.health = player.health - 7.8
+                table.remove(projectiles.boss, i)
+            end
+        end
+
         -- Resetting TPS
         accumulator = accumulator - tick_period
     end
