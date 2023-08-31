@@ -7,6 +7,7 @@ love.load = function()
         y = 100,
         width = 40,
         height = 40,
+        timer = 0,
         physics = {
             velocity = {
                 x = 0,
@@ -26,6 +27,7 @@ love.load = function()
         y = 500,
         width = 60,
         height = 60,
+        timer = 0,
         physics = {
             velocity = {
                 x = 0,
@@ -183,6 +185,28 @@ love.update = function(dt)
             end
         end
 
+        -- Timers
+        player.timer = player.timer + 1
+        boss.timer = boss.timer + 1
+
+        if player.timer >= 200 then
+            player.timer = 0
+        end
+
+        if boss.health >= 500 then
+            if boss.timer >= 300 then
+                boss.timer = 0
+            end
+        elseif boss.health < 500 and boss.health >= 250 then
+            if boss.timer >= 200 then
+                boss.timer = 0
+            end
+        elseif boss.health < 250 then
+            if boss.timer >= 100 then
+                boss.timer = 0
+            end
+        end
+
         -- Resetting TPS
         accumulator = accumulator - tick_period
     end
@@ -277,6 +301,8 @@ love.draw = function()
         -- Drawing If Player is Grounded, FPS and number of Projectiles
         love.graphics.print(tostring(player.physics.grounded), 0, 15)
         love.graphics.print(fps)
+        love.graphics.print(tostring(player.timer), 0, 30)
+        love.graphics.print(tostring(boss.timer), 0, 40)
         love.graphics.print(tostring(#projectiles.player), 50, 15)
     elseif boss.health <= 0 then
         love.graphics.print("YOU WON!!", (window_width / 2) - 50)
