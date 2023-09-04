@@ -85,7 +85,6 @@ love.update = function(dt)
     if accumulator >= tick_period then
         -- Reset Player and Boss Velocity
         player.physics.velocity.x = 0
-        boss.physics.velocity.x = 0
 
         -- Player Collisions With Platforms and Ground
         if player.y >= window_height - player.height or (
@@ -156,6 +155,7 @@ love.update = function(dt)
         -- Player Movement
         player.x = player.x + player.physics.velocity.x
         player.y = player.y + player.physics.velocity.y
+
         -- Boss Movement
         boss.x = boss.x + boss.physics.velocity.x
         boss.y = boss.y + boss.physics.velocity.y
@@ -213,14 +213,32 @@ love.update = function(dt)
         end
 
         if boss.health >= 500 then
+            -- Boss movement
+            if boss.x >= window_width - boss.width or boss.x <= 0 then
+                boss.x = boss.x
+            else
+                boss.x = boss.x + 3
+            end
             if boss.timer >= 300 then
                 boss.timer = 0
             end
         elseif boss.health < 500 and boss.health >= 250 then
+            -- Boss movement
+            if boss.x >= window_width - boss.width or boss.x <= 0 then
+                boss.x = boss.x
+            else
+                boss.x = boss.x + 4
+            end
             if boss.timer >= 200 then
                 boss.timer = 0
             end
         elseif boss.health < 250 then
+            -- Boss movement
+            if boss.x >= window_width - boss.width or boss.x <= 0 then
+                boss.x = boss.x
+            else
+                boss.x = boss.x + 5
+            end
             if boss.timer >= 100 then
                 boss.timer = 0
             end
