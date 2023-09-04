@@ -39,6 +39,12 @@ love.load = function()
             grounded = false,
         },
         health = 780,
+        projectile_timer = 0,
+        projectile_timer_max = {
+            projectile_one = 60,
+            projectile_two = 50,
+            projectile_three = 40
+        }
     }
 
     -- Platform Variables
@@ -167,6 +173,19 @@ love.update = function(dt)
             end
         end
 
+        --Boss Projectile Movement
+        for i, projectile in pairs(projectiles.boss) do
+            if projectile.direction == 1 then
+                projectile.x = projectile.x - 7
+            elseif projectile.direction == 2 then
+                projectile.x = projectile.x + 7
+            end
+
+            if projectile.x >= window_width or projectile.x <= 0 then
+                table.remove(projectiles.boss, i)
+            end
+        end
+
         -- Boss hit by Projectile
         for i, projectile in pairs(projectiles.player) do
             if (projectile.x > boss.x and projectile.x < boss.x + boss.width)
@@ -204,6 +223,91 @@ love.update = function(dt)
         elseif boss.health < 250 then
             if boss.timer >= 100 then
                 boss.timer = 0
+            end
+        end
+
+        -- Projectile Timers
+        boss.projectile_timer = boss.projectile_timer + 1
+        if boss.health >= 500 then
+            if boss.projectile_timer >= boss.projectile_timer_max.projectile_one then
+                boss.projectile_timer = 0
+                if player.x - boss.x <= 0 then
+                    table.insert(
+                        projectiles.boss,
+                        {
+                            x = boss.x,
+                            y = boss.y + 25,
+                            w = 20,
+                            h = 3,
+                            direction = 1
+                        }
+                    )
+                elseif player.x - boss.x > 0 then
+                    table.insert(
+                        projectiles.boss,
+                        {
+                            x = boss.x,
+                            y = boss.y + 25,
+                            w = 20,
+                            h = 3,
+                            direction = 2
+                        }
+                    )
+                end
+            end
+        elseif boss.health < 500 and boss.health >= 250 then
+            if boss.projectile_timer >= boss.projectile_timer_max.projectile_two then
+                boss.projectile_timer = 0
+                if player.x - boss.x <= 0 then
+                    table.insert(
+                        projectiles.boss,
+                        {
+                            x = boss.x,
+                            y = boss.y + 25,
+                            w = 20,
+                            h = 3,
+                            direction = 1
+                        }
+                    )
+                elseif player.x - boss.x > 0 then
+                    table.insert(
+                        projectiles.boss,
+                        {
+                            x = boss.x,
+                            y = boss.y + 25,
+                            w = 20,
+                            h = 3,
+                            direction = 2
+                        }
+                    )
+                end
+            end
+        elseif boss.health < 250 then
+            if boss.projectile_timer >= boss.projectile_timer_max.projectile_three then
+                boss.projectile_timer = 0
+                if player.x - boss.x <= 0 then
+                    table.insert(
+                        projectiles.boss,
+                        {
+                            x = boss.x,
+                            y = boss.y + 25,
+                            w = 20,
+                            h = 3,
+                            direction = 1
+                        }
+                    )
+                elseif player.x - boss.x > 0 then
+                    table.insert(
+                        projectiles.boss,
+                        {
+                            x = boss.x,
+                            y = boss.y + 25,
+                            w = 20,
+                            h = 3,
+                            direction = 2
+                        }
+                    )
+                end
             end
         end
 
@@ -251,7 +355,7 @@ love.draw = function()
             platform_right.height
         )
 
-        -- Draw Projectiles
+        -- Draw Player Projectiles
         for i, projectile in pairs(projectiles.player) do
             love.graphics.rectangle(
                 "fill",
@@ -261,6 +365,19 @@ love.draw = function()
                 projectile.h
             )
         end
+
+        love.graphics.setColor(128, 0, 128)
+        -- Draw Player Projectiles
+        for i, projectile in pairs(projectiles.boss) do
+            love.graphics.rectangle(
+                "fill",
+                projectile.x,
+                projectile.y,
+                projectile.w,
+                projectile.h
+            )
+        end
+        love.graphics.setColor(255, 255, 255)
 
         -- Drawing Boss health bar
         love.graphics.rectangle(
