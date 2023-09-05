@@ -239,19 +239,43 @@ love.update = function(dt)
             -- Boss movement
             if boss.x >= window_width - boss.width or boss.x <= 0 then
                 boss.x = boss.x
-            else
-                boss.x = boss.x + 4
+            elseif player.x - boss.x <= -150 then
+                boss.x = boss.x - 2
+            elseif player.x - boss.x >= 150 then
+                boss.x = boss.x + 2
+            elseif player.x - boss.x >= -150 and player.x - boss.x <= 0 then
+                boss.x = boss.x + 1
+            elseif player.x - boss.x <= 150 and player.x - boss.x >= 0 then
+                boss.x = boss.x - 1
             end
-            if boss.timer >= 200 then
+
+            -- W.I.P Boss jumps when player is above them
+            if player.y < boss.y and boss.timer > 250 and boss.physics.grounded then
+                boss.physics.velocity.y = -boss.physics.jump_force
+            end
+
+            if boss.tier >= 200 then
                 boss.timer = 0
             end
         elseif boss.health < 250 then
             -- Boss movement
             if boss.x >= window_width - boss.width or boss.x <= 0 then
                 boss.x = boss.x
-            else
-                boss.x = boss.x + 5
+            elseif player.x - boss.x <= -150 then
+                boss.x = boss.x - 2
+            elseif player.x - boss.x >= 150 then
+                boss.x = boss.x + 2
+            elseif player.x - boss.x >= -150 and player.x - boss.x <= 0 then
+                boss.x = boss.x + 1
+            elseif player.x - boss.x <= 150 and player.x - boss.x >= 0 then
+                boss.x = boss.x - 1
             end
+
+            -- W.I.P Boss jumps when player is above them
+            if player.y < boss.y and boss.timer > 250 and boss.physics.grounded then
+                boss.physics.velocity.y = -boss.physics.jump_force
+            end
+
             if boss.timer >= 100 then
                 boss.timer = 0
             end
