@@ -44,7 +44,7 @@ love.load = function()
             projectile_one = 60,
             projectile_two = 50,
             projectile_three = 40
-        }
+        },
     }
 
     -- Platform Variables
@@ -212,13 +212,26 @@ love.update = function(dt)
             player.timer = 0
         end
 
+        -- Movement Timers
         if boss.health >= 500 then
             -- Boss movement
             if boss.x >= window_width - boss.width or boss.x <= 0 then
                 boss.x = boss.x
-            else
-                boss.x = boss.x + 3
+            elseif player.x - boss.x <= -150 then
+                boss.x = boss.x - 2
+            elseif player.x - boss.x >= 150 then
+                boss.x = boss.x + 2
+            elseif player.x - boss.x >= -150 and player.x - boss.x <= 0 then
+                boss.x = boss.x + 1
+            elseif player.x - boss.x <= 150 and player.x - boss.x >= 0 then
+                boss.x = boss.x - 1
             end
+
+            -- W.I.P Boss jumps when player is above them
+            if player.y < boss.y and boss.timer > 250 and boss.physics.grounded then
+                boss.physics.velocity.y = -boss.physics.jump_force
+            end
+
             if boss.timer >= 300 then
                 boss.timer = 0
             end
@@ -436,6 +449,7 @@ love.draw = function()
         -- Drawing If Player is Grounded, FPS and number of Projectiles
         love.graphics.print(tostring(player.physics.grounded), 0, 15)
         love.graphics.print(fps)
+        love.graphics.print((player.x - boss.x), 0, 50)
         love.graphics.print(tostring(player.timer), 0, 30)
         love.graphics.print(tostring(boss.timer), 0, 40)
         love.graphics.print(tostring(#projectiles.player), 50, 15)
