@@ -217,18 +217,18 @@ love.update = function(dt)
             -- Boss movement
             if boss.x >= window_width - boss.width or boss.x <= 0 then
                 boss.x = boss.x
-            elseif player.x - boss.x <= -150 then
+            elseif x_distance <= -150 then
                 boss.x = boss.x - 2
-            elseif player.x - boss.x >= 150 then
+            elseif x_distance >= 150 then
                 boss.x = boss.x + 2
-            elseif player.x - boss.x >= -150 and player.x - boss.x <= 0 then
+            elseif x_distance >= -150 and x_distance <= 0 then
                 boss.x = boss.x + 1
-            elseif player.x - boss.x <= 150 and player.x - boss.x >= 0 then
+            elseif x_distance <= 150 and x_distance >= 0 then
                 boss.x = boss.x - 1
             end
 
             -- W.I.P Boss jumps when player is above them
-            if player.y < boss.y and boss.timer > 250 and boss.physics.grounded then
+            if y_distance >= 150 and boss.physics.grounded then
                 boss.physics.velocity.y = -boss.physics.jump_force
             end
 
@@ -239,13 +239,13 @@ love.update = function(dt)
             -- Boss movement
             if boss.x >= window_width - boss.width or boss.x <= 0 then
                 boss.x = boss.x
-            elseif player.x - boss.x <= -150 then
+            elseif x_distance <= -150 then
                 boss.x = boss.x - 2
-            elseif player.x - boss.x >= 150 then
+            elseif x_distance >= 150 then
                 boss.x = boss.x + 2
-            elseif player.x - boss.x >= -150 and player.x - boss.x <= 0 then
+            elseif x_distance >= -150 and x_distance <= 0 then
                 boss.x = boss.x + 1
-            elseif player.x - boss.x <= 150 and player.x - boss.x >= 0 then
+            elseif x_distance <= 150 and x_distance >= 0 then
                 boss.x = boss.x - 1
             end
 
@@ -261,15 +261,18 @@ love.update = function(dt)
             -- Boss movement
             if boss.x >= window_width - boss.width or boss.x <= 0 then
                 boss.x = boss.x
-            elseif player.x - boss.x <= -150 then
+            elseif x_distance >= 146 and x_distance <= 154 then
+                boss.x = boss.x
+            elseif x_distance <= -155 then
                 boss.x = boss.x - 2
-            elseif player.x - boss.x >= 150 then
+            elseif x_distance >= 155 then
                 boss.x = boss.x + 2
-            elseif player.x - boss.x >= -150 and player.x - boss.x <= 0 then
+            elseif x_distance >= -145 and x_distance <= 0 then
                 boss.x = boss.x + 1
-            elseif player.x - boss.x <= 150 and player.x - boss.x >= 0 then
+            elseif x_distance <= 145 and x_distance >= 0 then
                 boss.x = boss.x - 1
             end
+
 
             -- W.I.P Boss jumps when player is above them
             if player.y < boss.y and boss.timer > 50 and boss.physics.grounded then
@@ -286,7 +289,7 @@ love.update = function(dt)
         if boss.health >= 500 then
             if boss.projectile_timer >= boss.projectile_timer_max.projectile_one then
                 boss.projectile_timer = 0
-                if player.x - boss.x <= 0 then
+                if x_distance <= 0 then
                     table.insert(
                         projectiles.boss,
                         {
@@ -297,7 +300,7 @@ love.update = function(dt)
                             direction = 1
                         }
                     )
-                elseif player.x - boss.x > 0 then
+                elseif x_distance > 0 then
                     table.insert(
                         projectiles.boss,
                         {
@@ -313,7 +316,7 @@ love.update = function(dt)
         elseif boss.health < 500 and boss.health >= 250 then
             if boss.projectile_timer >= boss.projectile_timer_max.projectile_two then
                 boss.projectile_timer = 0
-                if player.x - boss.x <= 0 then
+                if x_distance <= 0 then
                     table.insert(
                         projectiles.boss,
                         {
@@ -324,7 +327,7 @@ love.update = function(dt)
                             direction = 1
                         }
                     )
-                elseif player.x - boss.x > 0 then
+                elseif x_distance > 0 then
                     table.insert(
                         projectiles.boss,
                         {
@@ -340,7 +343,7 @@ love.update = function(dt)
         elseif boss.health < 250 then
             if boss.projectile_timer >= boss.projectile_timer_max.projectile_three then
                 boss.projectile_timer = 0
-                if player.x - boss.x <= 0 then
+                if x_distance <= 0 then
                     table.insert(
                         projectiles.boss,
                         {
@@ -351,7 +354,7 @@ love.update = function(dt)
                             direction = 1
                         }
                     )
-                elseif player.x - boss.x > 0 then
+                elseif x_distance > 0 then
                     table.insert(
                         projectiles.boss,
                         {
@@ -371,6 +374,10 @@ love.update = function(dt)
     end
     -- Getting FPS
     fps = love.timer.getFPS()
+
+    -- Changing variables
+    x_distance = player.x - boss.x
+    y_distance = player.y - boss.y
 end
 
 love.draw = function()
@@ -470,10 +477,13 @@ love.draw = function()
         )
         love.graphics.setColor(255, 255, 255)
 
-        -- Drawing If Player is Grounded, FPS and number of Projectiles
+        -- Drawing Debug Stats
         love.graphics.print(tostring(player.physics.grounded), 0, 15)
+        love.graphics.print(tostring(boss.physics.grounded), 20, 15)
+
         love.graphics.print(fps)
-        love.graphics.print((player.x - boss.x), 0, 50)
+        love.graphics.print((x_distance), 0, 50)
+        love.graphics.print((y_distance), 0, 60)
         love.graphics.print(tostring(player.timer), 0, 30)
         love.graphics.print(tostring(boss.timer), 0, 40)
         love.graphics.print(tostring(#projectiles.player), 50, 15)
