@@ -217,18 +217,20 @@ love.update = function(dt)
             -- Boss movement
             if boss.x >= window_width - boss.width or boss.x <= 0 then
                 boss.x = boss.x
-            elseif x_distance <= -150 then
+            elseif x_distance >= 146 and x_distance <= 154 then
+                boss.x = boss.x
+            elseif x_distance <= -155 then
                 boss.x = boss.x - 2
-            elseif x_distance >= 150 then
+            elseif x_distance >= 155 then
                 boss.x = boss.x + 2
-            elseif x_distance >= -150 and x_distance <= 0 then
+            elseif x_distance >= -145 and x_distance <= 0 then
                 boss.x = boss.x + 1
-            elseif x_distance <= 150 and x_distance >= 0 then
+            elseif x_distance <= 145 and x_distance >= 0 then
                 boss.x = boss.x - 1
             end
 
             -- W.I.P Boss jumps when player is above them
-            if y_distance >= 150 and boss.physics.grounded then
+            if y_distance <= -150 and boss.physics.grounded then
                 boss.physics.velocity.y = -boss.physics.jump_force
             end
 
@@ -239,13 +241,15 @@ love.update = function(dt)
             -- Boss movement
             if boss.x >= window_width - boss.width or boss.x <= 0 then
                 boss.x = boss.x
-            elseif x_distance <= -150 then
+            elseif x_distance >= 146 and x_distance <= 154 then
+                boss.x = boss.x
+            elseif x_distance <= -155 then
                 boss.x = boss.x - 2
-            elseif x_distance >= 150 then
+            elseif x_distance >= 155 then
                 boss.x = boss.x + 2
-            elseif x_distance >= -150 and x_distance <= 0 then
+            elseif x_distance >= -145 and x_distance <= 0 then
                 boss.x = boss.x + 1
-            elseif x_distance <= 150 and x_distance >= 0 then
+            elseif x_distance <= 145 and x_distance >= 0 then
                 boss.x = boss.x - 1
             end
 
