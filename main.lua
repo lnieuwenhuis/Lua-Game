@@ -277,7 +277,6 @@ love.update = function(dt)
                 boss.x = boss.x - 1
             end
 
-
             -- W.I.P Boss jumps when player is above them
             if player.y < boss.y and boss.timer > 50 and boss.physics.grounded then
                 boss.physics.velocity.y = -boss.physics.jump_force
