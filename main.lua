@@ -250,11 +250,11 @@ love.update = function(dt)
             end
 
             -- W.I.P Boss jumps when player is above them
-            if player.y < boss.y and boss.timer > 250 and boss.physics.grounded then
+            if player.y < boss.y and boss.timer > 150 and boss.physics.grounded then
                 boss.physics.velocity.y = -boss.physics.jump_force
             end
 
-            if boss.tier >= 200 then
+            if boss.timer >= 200 then
                 boss.timer = 0
             end
         elseif boss.health < 250 then
@@ -272,7 +272,7 @@ love.update = function(dt)
             end
 
             -- W.I.P Boss jumps when player is above them
-            if player.y < boss.y and boss.timer > 250 and boss.physics.grounded then
+            if player.y < boss.y and boss.timer > 50 and boss.physics.grounded then
                 boss.physics.velocity.y = -boss.physics.jump_force
             end
 
