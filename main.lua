@@ -429,7 +429,7 @@ love.draw = function()
         end
 
         love.graphics.setColor(128, 0, 128)
-        -- Draw Player Projectiles
+        -- Draw Boss Projectiles
         for i, projectile in pairs(projectiles.boss) do
             love.graphics.rectangle(
                 "fill",
