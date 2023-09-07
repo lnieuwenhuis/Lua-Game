@@ -156,10 +156,6 @@ love.update = function(dt)
         player.x = player.x + player.physics.velocity.x
         player.y = player.y + player.physics.velocity.y
 
-        -- Boss Movement
-        boss.x = boss.x + boss.physics.velocity.x
-        boss.y = boss.y + boss.physics.velocity.y
-
         -- Player Projectile Movement
         for i, projectile in pairs(projectiles.player) do
             if projectile.direction == 1 then
@@ -229,8 +225,8 @@ love.update = function(dt)
                 boss.x = boss.x - 1
             end
 
-            -- W.I.P Boss jumps when player is above them
-            if y_distance <= -150 and boss.physics.grounded then
+            -- Boss jumps when player is above them
+            if boss.physics.grounded and y_distance <= -160 then
                 boss.physics.velocity.y = -boss.physics.jump_force
             end
 
@@ -253,8 +249,8 @@ love.update = function(dt)
                 boss.x = boss.x - 1
             end
 
-            -- W.I.P Boss jumps when player is above them
-            if player.y < boss.y and boss.timer > 150 and boss.physics.grounded then
+            -- Boss jumps when player is above them
+            if boss.physics.grounded and y_distance <= -160 then
                 boss.physics.velocity.y = -boss.physics.jump_force
             end
 
@@ -277,8 +273,8 @@ love.update = function(dt)
                 boss.x = boss.x - 1
             end
 
-            -- W.I.P Boss jumps when player is above them
-            if player.y < boss.y and boss.timer > 50 and boss.physics.grounded then
+            -- Boss jumps when player is above them
+            if boss.physics.grounded and y_distance <= -160 then
                 boss.physics.velocity.y = -boss.physics.jump_force
             end
 
@@ -371,6 +367,10 @@ love.update = function(dt)
                 end
             end
         end
+
+        -- Boss Movement
+        boss.x = boss.x + boss.physics.velocity.x
+        boss.y = boss.y + boss.physics.velocity.y
 
         -- Resetting TPS
         accumulator = accumulator - tick_period
