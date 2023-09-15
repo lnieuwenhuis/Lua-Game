@@ -3,6 +3,7 @@ love.load = function()
 
     -- Player Variables
     player = {
+        sprite = love.graphics.newImage("assets/player/single.png"),
         x = 100,
         y = 100,
         width = 40,
@@ -386,14 +387,13 @@ end
 love.draw = function()
     if boss.health > 0 and player.health > 0 then
         -- Drawing Player
-        love.graphics.rectangle(
-            "fill",
+        love.graphics.draw(
+            player.sprite,
             player.x,
-            player.y,
-            player.width,
-            player.height
+            player.y
         )
 
+        -- Drawing Boss
         love.graphics.setColor(0, 0, 255)
         love.graphics.rectangle(
             "fill",
