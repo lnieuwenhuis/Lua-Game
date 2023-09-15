@@ -1,6 +1,9 @@
 love.load = function()
     love.window.setTitle("Moon Invasion Defense")
 
+    -- Background Image Loading
+    background = love.graphics.newImage("assets/back+platform/lua game back.jpg")
+
     -- Player Variables
     player = {
         sprite = love.graphics.newImage("assets/player/single.png"),
@@ -386,6 +389,13 @@ end
 
 love.draw = function()
     if boss.health > 0 and player.health > 0 then
+        -- Drawing Background
+        for i = 0, love.graphics.getWidth() / background:getWidth() do
+            for j = 0, love.graphics.getHeight() / background:getHeight() do
+                love.graphics.draw(background, i * background:getWidth(), j * background:getHeight())
+            end
+        end
+
         -- Drawing Player
         love.graphics.draw(
             player.sprite,
