@@ -23,11 +23,12 @@ love.load = function()
             grounded = false,
         },
         health = 100,
-        direction = 1,
+        direction = {},
     }
 
     -- Boss Variables
     boss = {
+        sprite = love.graphics.newImage("assets/boss/single.png"),
         x = 600,
         y = 500,
         width = 60,
@@ -251,16 +252,12 @@ love.update = function(dt)
                 boss.x = boss.x
             elseif x_distance <= -155 then
                 boss.physics.velocity.x = -2
-                boss.direction = 1
             elseif x_distance >= 155 then
                 boss.physics.velocity.x = 2
-                boss.direction = 2
             elseif x_distance >= -145 and x_distance <= 0 then
                 boss.physics.velocity.x = 1
-                boss.direction = 1
             elseif x_distance <= 145 and x_distance >= 0 then
                 boss.physics.velocity.x = -1
-                boss.direction = 2
             end
 
             -- Boss jumps when player is above them
@@ -279,16 +276,12 @@ love.update = function(dt)
                 boss.x = boss.x
             elseif x_distance <= -155 then
                 boss.physics.velocity.x = -2
-                boss.direction = 1
             elseif x_distance >= 155 then
                 boss.physics.velocity.x = 2
-                boss.direction = 2
             elseif x_distance >= -145 and x_distance <= 0 then
                 boss.physics.velocity.x = 1
-                boss.direction = 1
             elseif x_distance <= 145 and x_distance >= 0 then
                 boss.physics.velocity.x = -1
-                boss.direction = 2
             end
 
             -- Boss jumps when player is above them
@@ -394,10 +387,17 @@ love.update = function(dt)
         -- Resetting TPS
         accumulator = accumulator - tick_period
 
-        -- Determining Directions
-        if player.physics.velocity.x >= 0 then
+        -- Determining Player Direction
+        if player.physics.velocity.x > 0 then
             player.direction = 1
         elseif player.physics.velocity.x < 0 then
+            player.direction = 2
+        end
+
+        -- Determining Boss Direction
+        if boss.physics.velocity.x > 0 then
+            player.direction = 1
+        elseif boss.physics.velocity.x < 0 then
             player.direction = 2
         end
     end
@@ -415,25 +415,49 @@ love.draw = function()
         love.graphics.draw(background, 0, 0, 0, window_width / 1080, window_height / 1080)
 
         -- Drawing Player
-        love.graphics.draw(
-            player.sprite,
-            player.x,
-            player.y,
-            0,
-            2.3,
-            2.3
-        )
+        if player.direction == 1 then
+            love.graphics.draw(
+                player.sprite,
+                player.x,
+                player.y,
+                0,
+                2.3,
+                2.3
+            )
+        elseif player.direction == 2 then
+            love.graphics.draw(
+                player.sprite,
+                player.x,
+                player.y,
+                0,
+                -2.3,
+                2.3,
+                8
+            )
+        end
 
         -- Drawing Boss
-        love.graphics.setColor(0, 0, 255)
-        love.graphics.rectangle(
-            "fill",
-            boss.x,
-            boss.y,
-            boss.width,
-            boss.height
-        )
-        love.graphics.setColor(255, 255, 255)
+        if boss.direction == 2 then
+            love.graphics.draw(
+                boss.sprite,
+                boss.x,
+                boss.y,
+                0,
+                3,
+                3,
+                10
+            )
+        elseif boss.direction == 1 then
+            love.graphics.draw(
+                boss.sprite,
+                boss.x,
+                boss.y,
+                0,
+                -3,
+                3,
+                30
+            )
+        end
 
         -- Drawing Platforms
         love.graphics.rectangle(
