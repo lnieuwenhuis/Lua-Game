@@ -224,16 +224,12 @@ love.update = function(dt)
                 boss.x = boss.x
             elseif x_distance <= -155 then
                 boss.physics.velocity.x = -2
-                boss.direction = 1
             elseif x_distance >= 155 then
                 boss.physics.velocity.x = 2
-                boss.direction = 2
             elseif x_distance >= -145 and x_distance <= 0 then
                 boss.physics.velocity.x = 1
-                boss.direction = 1
             elseif x_distance <= 145 and x_distance >= 0 then
                 boss.physics.velocity.x = -1
-                boss.direction = 2
             end
 
             -- Boss jumps when player is above them
