@@ -396,9 +396,9 @@ love.update = function(dt)
 
         -- Determining Boss Direction
         if boss.physics.velocity.x > 0 then
-            player.direction = 1
+            boss.direction = 1
         elseif boss.physics.velocity.x < 0 then
-            player.direction = 2
+            boss.direction = 2
         end
     end
     -- Getting FPS
