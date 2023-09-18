@@ -2,7 +2,7 @@ love.load = function()
     love.window.setTitle("Moon Invasion Defense")
 
     -- Background Image Loading
-    background = love.graphics.newImage("assets/back+platform/lua game back.jpg")
+    background = love.graphics.newImage("assets/back+platform/background.jpg")
 
     -- Player Variables
     player = {
@@ -23,6 +23,7 @@ love.load = function()
             grounded = false,
         },
         health = 100,
+        direction = 1,
     }
 
     -- Boss Variables
@@ -49,6 +50,7 @@ love.load = function()
             projectile_two = 50,
             projectile_three = 40
         },
+        direction = 1
     }
 
     -- Platform Variables
@@ -220,13 +222,17 @@ love.update = function(dt)
             elseif x_distance >= 146 and x_distance <= 154 then
                 boss.x = boss.x
             elseif x_distance <= -155 then
-                boss.x = boss.x - 2
+                boss.physics.velocity.x = -2
+                boss.direction = 1
             elseif x_distance >= 155 then
-                boss.x = boss.x + 2
+                boss.physics.velocity.x = 2
+                boss.direction = 2
             elseif x_distance >= -145 and x_distance <= 0 then
-                boss.x = boss.x + 1
+                boss.physics.velocity.x = 1
+                boss.direction = 1
             elseif x_distance <= 145 and x_distance >= 0 then
-                boss.x = boss.x - 1
+                boss.physics.velocity.x = -1
+                boss.direction = 2
             end
 
             -- Boss jumps when player is above them
@@ -244,13 +250,17 @@ love.update = function(dt)
             elseif x_distance >= 146 and x_distance <= 154 then
                 boss.x = boss.x
             elseif x_distance <= -155 then
-                boss.x = boss.x - 2
+                boss.physics.velocity.x = -2
+                boss.direction = 1
             elseif x_distance >= 155 then
-                boss.x = boss.x + 2
+                boss.physics.velocity.x = 2
+                boss.direction = 2
             elseif x_distance >= -145 and x_distance <= 0 then
-                boss.x = boss.x + 1
+                boss.physics.velocity.x = 1
+                boss.direction = 1
             elseif x_distance <= 145 and x_distance >= 0 then
-                boss.x = boss.x - 1
+                boss.physics.velocity.x = -1
+                boss.direction = 2
             end
 
             -- Boss jumps when player is above them
@@ -268,17 +278,22 @@ love.update = function(dt)
             elseif x_distance >= 146 and x_distance <= 154 then
                 boss.x = boss.x
             elseif x_distance <= -155 then
-                boss.x = boss.x - 2
+                boss.physics.velocity.x = -2
+                boss.direction = 1
             elseif x_distance >= 155 then
-                boss.x = boss.x + 2
+                boss.physics.velocity.x = 2
+                boss.direction = 2
             elseif x_distance >= -145 and x_distance <= 0 then
-                boss.x = boss.x + 1
+                boss.physics.velocity.x = 1
+                boss.direction = 1
             elseif x_distance <= 145 and x_distance >= 0 then
-                boss.x = boss.x - 1
+                boss.physics.velocity.x = -1
+                boss.direction = 2
             end
 
             -- Boss jumps when player is above them
-            if boss.physics.grounded and y_distance <= -160 then
+            if
+                boss.physics.grounded and y_distance <= -160 then
                 boss.physics.velocity.y = -boss.physics.jump_force
             end
 
@@ -378,6 +393,13 @@ love.update = function(dt)
 
         -- Resetting TPS
         accumulator = accumulator - tick_period
+
+        -- Determining Directions
+        if player.physics.velocity.x >= 0 then
+            player.direction = 1
+        elseif player.physics.velocity.x < 0 then
+            player.direction = 2
+        end
     end
     -- Getting FPS
     fps = love.timer.getFPS()
@@ -390,17 +412,16 @@ end
 love.draw = function()
     if boss.health > 0 and player.health > 0 then
         -- Drawing Background
-        for i = 0, love.graphics.getWidth() / background:getWidth() do
-            for j = 0, love.graphics.getHeight() / background:getHeight() do
-                love.graphics.draw(background, i * background:getWidth(), j * background:getHeight())
-            end
-        end
+        love.graphics.draw(background, 0, 0, 0, window_width / 1080, window_height / 1080)
 
         -- Drawing Player
         love.graphics.draw(
             player.sprite,
             player.x,
-            player.y
+            player.y,
+            0,
+            2.3,
+            2.3
         )
 
         -- Drawing Boss
@@ -493,6 +514,9 @@ love.draw = function()
         -- Drawing Debug Stats
         love.graphics.print(tostring(player.physics.grounded), 0, 15)
         love.graphics.print(tostring(boss.physics.grounded), 20, 15)
+
+        love.graphics.print(tostring(player.direction), 0, 100)
+        love.graphics.print(tostring(boss.direction), 0, 90)
 
         love.graphics.print(fps)
         love.graphics.print((x_distance), 0, 50)
