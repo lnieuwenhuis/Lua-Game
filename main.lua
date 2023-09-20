@@ -305,7 +305,7 @@ love.update = function(dt)
                         projectiles.boss,
                         {
                             x = boss.x,
-                            y = boss.y + 25,
+                            y = boss.y + 50,
                             w = 20,
                             h = 3,
                             direction = 1
@@ -316,7 +316,7 @@ love.update = function(dt)
                         projectiles.boss,
                         {
                             x = boss.x,
-                            y = boss.y + 25,
+                            y = boss.y + 50,
                             w = 20,
                             h = 3,
                             direction = 2
@@ -332,7 +332,7 @@ love.update = function(dt)
                         projectiles.boss,
                         {
                             x = boss.x,
-                            y = boss.y + 25,
+                            y = boss.y + 50,
                             w = 20,
                             h = 3,
                             direction = 1
@@ -343,7 +343,7 @@ love.update = function(dt)
                         projectiles.boss,
                         {
                             x = boss.x,
-                            y = boss.y + 25,
+                            y = boss.y + 50,
                             w = 20,
                             h = 3,
                             direction = 2
@@ -359,7 +359,7 @@ love.update = function(dt)
                         projectiles.boss,
                         {
                             x = boss.x,
-                            y = boss.y + 25,
+                            y = boss.y + 50,
                             w = 20,
                             h = 3,
                             direction = 1
@@ -370,7 +370,7 @@ love.update = function(dt)
                         projectiles.boss,
                         {
                             x = boss.x,
-                            y = boss.y + 25,
+                            y = boss.y + 50,
                             w = 20,
                             h = 3,
                             direction = 2
@@ -573,7 +573,7 @@ function love.keypressed(key)
             projectiles.player,
             {
                 x = player.x,
-                y = player.y,
+                y = player.y + 10,
                 w = 20,
                 h = 3,
                 direction = 1
@@ -588,7 +588,7 @@ function love.keypressed(key)
             projectiles.player,
             {
                 x = player.x,
-                y = player.y,
+                y = player.y + 10,
                 w = 20,
                 h = 3,
                 direction = 2
