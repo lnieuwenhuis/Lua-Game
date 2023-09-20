@@ -9,8 +9,6 @@ love.load = function()
         sprite = love.graphics.newImage("assets/player/single.png"),
         x = 100,
         y = 100,
-        width = 40,
-        height = 40,
         timer = 0,
         physics = {
             velocity = {
@@ -23,7 +21,7 @@ love.load = function()
             grounded = false,
         },
         health = 100,
-        direction = {},
+        direction = 1,
     }
 
     -- Boss Variables
@@ -31,8 +29,6 @@ love.load = function()
         sprite = love.graphics.newImage("assets/boss/single.png"),
         x = 600,
         y = 500,
-        width = 60,
-        height = 60,
         timer = 0,
         physics = {
             velocity = {
@@ -87,6 +83,14 @@ love.load = function()
 end
 
 love.update = function(dt)
+    -- Setting Player Dimensions to Sprite Dimensions
+    player.width = (player.sprite:getWidth() * 2.3)
+    player.height = (player.sprite:getHeight() * 2.3)
+
+    -- Setting Boss Dimensions to Sprite Dimensions
+    boss.width = (boss.sprite:getWidth() * 3)
+    boss.height = (boss.sprite:getHeight() * 3)
+
     accumulator = accumulator + dt
     -- Caps Physics to 60 TPS
     if accumulator >= tick_period then
@@ -391,10 +395,14 @@ love.update = function(dt)
         end
 
         -- Determining Boss Direction
-        if boss.physics.velocity.x > 0 then
-            boss.direction = 1
-        elseif boss.physics.velocity.x < 0 then
+        if boss.physics.velocity.x >= 2 then
             boss.direction = 2
+        elseif boss.physics.velocity.x == -1 then
+            boss.direction = 2
+        elseif boss.physics.velocity.x <= -2 then
+            boss.direction = 1
+        elseif boss.physics.velocity.x == 1 then
+            boss.direction = 1
         end
     end
     -- Getting FPS
@@ -418,7 +426,9 @@ love.draw = function()
                 player.y,
                 0,
                 2.3,
-                2.3
+                2.3,
+                0
+
             )
         elseif player.direction == 2 then
             love.graphics.draw(
@@ -429,11 +439,12 @@ love.draw = function()
                 -2.3,
                 2.3,
                 8
+
             )
         end
 
         -- Drawing Boss
-        if boss.direction == 2 then
+        if boss.direction == 2 and (boss.physics.velocity.x == 2 or boss.physics.velocity.x == -1) then
             love.graphics.draw(
                 boss.sprite,
                 boss.x,
@@ -443,7 +454,7 @@ love.draw = function()
                 3,
                 10
             )
-        elseif boss.direction == 1 then
+        elseif boss.direction == 1 and (boss.physics.velocity.x == -2 or boss.physics.velocity.x == 1) then
             love.graphics.draw(
                 boss.sprite,
                 boss.x,
