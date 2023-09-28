@@ -6,7 +6,7 @@ love.load = function()
 
     -- Player Variables
     player = {
-        sprite = love.graphics.newImage("assets/player/single.png"),
+        sprite = love.graphics.newImage("assets/player/idle.png"),
         x = 100,
         y = 100,
         timer = 0,
@@ -23,6 +23,14 @@ love.load = function()
         health = 100,
         direction = 1,
     }
+
+    player.quad = love.graphics.newQuad(
+        0,
+        0,
+        25,
+        22,
+        player.sprite
+    )
 
     -- Boss Variables
     boss = {
@@ -84,8 +92,8 @@ end
 
 love.update = function(dt)
     -- Setting Player Dimensions to Sprite Dimensions
-    player.width = (player.sprite:getWidth() * 2.3)
-    player.height = (player.sprite:getHeight() * 2.3)
+    player.width = (30)
+    player.height = (22)
 
     -- Setting Boss Dimensions to Sprite Dimensions
     boss.width = (boss.sprite:getWidth() * 3)
@@ -422,24 +430,28 @@ love.draw = function()
         if player.direction == 1 then
             love.graphics.draw(
                 player.sprite,
-                player.x,
-                player.y,
-                0,
-                2.3,
-                2.3,
-                0
-
+                player.quad,
+                love.math.newTransform(
+                    player.x - 20,
+                    player.y - player.height,
+                    0,
+                    2.3,
+                    2.3,
+                    0
+                )
             )
         elseif player.direction == 2 then
             love.graphics.draw(
                 player.sprite,
-                player.x,
-                player.y,
-                0,
-                -2.3,
-                2.3,
-                8
-
+                player.quad,
+                love.math.newTransform(
+                    player.x + player.width * 2.3 - 20,
+                    player.y - player.height,
+                    0,
+                    -2.3,
+                    2.3,
+                    0
+                )
             )
         end
 
